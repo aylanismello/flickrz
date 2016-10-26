@@ -8,13 +8,13 @@ import Masonry from 'react-masonry-component';
 
 class App extends React.Component {
 
+
 	constructor(props){
 		super(props);
 		this.handleChange = this.handleChange.bind(this);
 		this.updatePics = this.updatePics.bind(this);
 
 		const photos = Array(6).fill({});
-
 
 		this.state = {
 			photos,
@@ -23,8 +23,12 @@ class App extends React.Component {
 
 	}
 
+  // when our query string changes we invoke the handleChange event listener
 	handleChange(event) {
 
+    // this code ensures that ajax requests are only made
+    // a maximum of 400ms after a user has finished typing.
+    // this leads to a much faster, responsive experience.
 		if(this.timeoutId)
 			window.clearTimeout(this.timeoutId);
 
@@ -39,13 +43,17 @@ class App extends React.Component {
 
   }
 
+  // this method fetches the first 5 photoIDs from the flickr search API
 	updatePics(query) {
 
+    //without this, error will occur with null query
 		if (!query) {
 			this.setState({query});
 			return;
 		}
 
+    // hack for fetching from flickr api.
+    // very poorly written, ineffective api.
 		const err = (errors) => {
 			let text = errors.responseText;
 
@@ -87,6 +95,7 @@ class App extends React.Component {
 	render() {
 		let results;
 
+    // if nothing has been set the the photos state yet, render empty divs.
 		if (!this.state.photos[0].title) {
 			results = this.state.photos.map(() => {
 					return (
@@ -96,6 +105,7 @@ class App extends React.Component {
 			});
 		}
 		else {
+      // if something has been set to photos state, populate with ImageItems
 			results = this.state.photos.map((photo, idx) => {
 					return (
 					<div>
@@ -123,14 +133,8 @@ class App extends React.Component {
 
         <div className="search-results-frame">
 
-          <Masonry
-               className={'search-results'} // default ''
-               elementType={'div'} // default 'div'
-               disableImagesLoaded={false} // default false
-               updateOnEachImageLoad={true} // default false and works only if disableImagesLoaded is false
-           >
+
                {results}
-           </Masonry>
 
   			</div>
       </div>

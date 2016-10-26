@@ -13,16 +13,21 @@ class ImageItem extends React.Component {
 			};
 		}
 
+
 		componentDidMount() {
 			let {photoId, photoTitle} = this.props;
 			this.fetchPicUrl(photoId, photoTitle);
 		}
 
+		// any time we receive to props, we need to update
+		// the image url to the new photoId
 		componentWillReceiveProps(nextProps) {
 			let {photoId, photoTitle} = nextProps;
 			this.fetchPicUrl(photoId, photoTitle);
 		}
 
+		// calls flickr getSizes endpoint which returns image assets
+		// based on photoId
 		fetchPicUrl(photoId, title) {
 
 			const photoReceived = (photoSizes) => {
